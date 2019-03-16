@@ -45,7 +45,7 @@ export default (): Middleware => {
     return value;
   };
 
-  return async function validate(ctx: Context, next: () => Promise<void>) {
+  return async function koexJoi(ctx: Context, next: () => Promise<void>) {
     if (!ctx.validate) {
       ctx.validate = async <D>(schema: Joi.SchemaLike, data?: D) => {
         return validateFn(ctx, schema, data);
