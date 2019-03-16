@@ -38,7 +38,7 @@ export default (): Middleware => {
     if (error) {
       ctx.throw(422, 'Validation Failed', {
         code: 'invalid_param',
-        error,
+        detail: error,
       });
     }
 
