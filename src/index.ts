@@ -1,4 +1,4 @@
-import { Context, Middleware } from 'koa';
+import { Context } from 'koa';
 import * as Joi from 'joi';
 
 declare module 'koa' {
@@ -30,7 +30,7 @@ declare module 'koa' {
 /**
  * validate
  */
-export default (): Middleware => {
+export default () => {
   const validateFn = async <D>(ctx: Context, schema: Joi.SchemaLike, data?: D) => {
     const _data: D = data || (ctx.request as any).body;
     const { error, value } = Joi.validate(_data, schema);
@@ -46,11 +46,9 @@ export default (): Middleware => {
   };
 
   return async function koexJoi(ctx: Context, next: () => Promise<void>) {
-    if (!ctx.validate) {
-      ctx.validate = async <D>(schema: Joi.SchemaLike, data?: D) => {
-        return validateFn(ctx, schema, data);
-      };
-    }
+    ctx.validate = async <D>(schema: Joi.SchemaLike, data?: D) => {
+      return validateFn(ctx, schema, data);
+    };
 
     await next();
   };
